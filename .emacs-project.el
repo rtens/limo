@@ -1,6 +1,6 @@
 (add-hook 'emacs-startup-hook
           (lambda ()
-            (split-window-horizontally -30)
+            (split-window-horizontally -20)
 	    (other-window 1)
 	    (cd root-directory)
 	    (term "npx ava --watch")
