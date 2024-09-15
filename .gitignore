@@ -1,3 +1,4 @@
 .emacs.desktop
 node_modules
 package-lock.json
+/.emacs.desktop.lock
