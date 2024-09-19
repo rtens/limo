@@ -25,9 +25,9 @@ test.todo('include slashes in name')
 
 test('respond 404 if Service does not exist', t => {
   const fix = new Fixture()
-  
+
   fix.post('*', '/foo/')
-  
+
   t.like(fix.response, {
     status: 404,
     content: "Service 'foo' does not exist"

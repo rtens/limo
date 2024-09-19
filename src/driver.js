@@ -6,14 +6,14 @@ export default class Driver {
 
   on_post(request, response) {
     const path = request.path
-	  .replace(/\/+$/, '')
-	  .replace(/^\/+/, '')
+          .replace(/\/+$/, '')
+          .replace(/^\/+/, '')
 
     const [service_name, command_name] = path.split('/')
 
     if (!this.services.has(service_name)) {
       response.status(404)
-	.send(`Service '${service_name}' does not exist`)
+  .send(`Service '${service_name}' does not exist`)
       return
     }
 
