@@ -9,30 +9,30 @@ Web-framework based Services with a unified interface consisting of
 ## Capabilities
 
 - Web Provider
-  - execute Command
-  - answer Query
+	- execute Command
+	- answer Query
 - File Based Service Loader
-  - load Service
+	- load Service
 - Standard Service
-  - subscribe Event
-  - unsubscribe Event
-  - publish Event
+	- subscribe Event
+	- unsubscribe Event
+	- publish Event
 - File Based Service
-  - execute Command
-  - answer Query
-  - subscribe Event
-  - react to Event
+	- execute Command
+	- answer Query
+	- subscribe Event
+	- react to Event
 - Specification Executer
-  - find Examples
-  - execute Examples
+	- find Examples
+	- execute Examples
 - Interface Description Generator
-  - generate Description
+	- generate Description
 - Command Line Manager
-  - list Servives (with descriptions)
-  - list Messages of Service (with descriptions)
-  - describe Message
-  - search Message by name
-  - search Message by content key
+	- list Servives (with descriptions)
+	- list Messages of Service (with descriptions)
+	- describe Message
+	- search Message by name
+	- search Message by content key
 
 
 ## Service Model
@@ -170,32 +170,32 @@ CapabilityBuilder
 
 ExampleBuilder
 - given: {
-    it: {
-      executed: (Command)
-    },
-    (dependency:String): {
-      published: (Event),
-      answers: (Query): {
-        with: (answer:Any)
-      }
-    }
-  }
+		it: {
+			executed: (Command)
+		},
+		(dependency:String): {
+			published: (Event),
+			answers: (Query): {
+				with: (answer:Any)
+			}
+		}
+	}
 - when: {
-    it: {
-    	executes: (Command),
+		it: {
+			executes: (Command),
 	answer: (Query)
-    },
-    (dependency:String): {
-      publishes: (Event)
-    }
-  }
+		},
+		(dependency:String): {
+			publishes: (Event)
+		}
+	}
 - then: {
-    it: { should: {
-      reject: (Rejection),
-      answer: (answer:Any),
-      publish: ([Event])
-    }},
-    (dependency:String): { should: {
-      execute: ([Command])
-    }}
-  }
+		it: { should: {
+			reject: (Rejection),
+			answer: (answer:Any),
+			publish: ([Event])
+		}},
+		(dependency:String): { should: {
+			execute: ([Command])
+		}}
+	}
