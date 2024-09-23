@@ -1,0 +1,7 @@
+(unless (get-buffer "limo test watch")
+	(split-window-horizontally -20)
+	(other-window 1)
+	(cd (projectile-project-root))
+	(term "npx ava --watch")
+	(rename-buffer "limo test watch")
+	(other-window 1))
