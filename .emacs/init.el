@@ -5,3 +5,4 @@
 	(term "npx ava --watch")
 	(rename-buffer "limo test watch")
 	(other-window 1))
+(magit-fetch-all-prune)
