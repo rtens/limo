@@ -1,14 +1,22 @@
-(defun my-limo-restore-windows ()
+(defun my-limo-run-tests ()
 	"Deletes all other windows and shows tests in side window"
 	(interactive)
 	(neotree-hide)
 	(delete-other-windows)
-	(split-window-horizontally -25)
+	(my-split-window-right)
 	(other-window 1)
-	(switch-to-buffer "limo test watch")
+	(if (get-buffer "limo test watch")
+			(switch-to-buffer "limo test watch")
+		(progn
+			(cd (projectile-project-root))
+			(my-shell "npx ava --watch")
+			(rename-buffer "limo test watch")))
+	(with-selected-window (get-buffer-window "limo test watch")
+		(setq window-size-fixed t)
+		(window-resize (selected-window) (- 30 (window-total-width)) t t))
 	(other-window 1))
 
-(global-set-key (kbd "C-x 9") 'my-limo-restore-windows)
+(global-set-key (kbd "C-x 9") 'my-limo-run-tests)
 
 (defun my-shell (command)
 	"Executes the command in a new shell"
@@ -22,13 +30,5 @@
 				(comint-send-input nil t))
 		(term command)))
 
-(unless (get-buffer "limo test watch")
-	(delete-other-windows)
-	(split-window-horizontally -20)
-	(other-window 1)
-	(cd (projectile-project-root))
-	(my-shell "npx ava --watch")
-	(rename-buffer "limo test watch")
-	(other-window 1))
-
+(my-limo-run-tests)
 (magit-fetch-all-prune)
