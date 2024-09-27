@@ -1,5 +1,6 @@
 import test from 'ava';
 import Fixture from './_fixture.js';
+import Rejection from '../../src/rejection.js';
 
 test('use path of POST as name', t => {
 	const fix = new Fixture();
@@ -31,7 +32,16 @@ test('use body as content', t => {
 
 test.todo('use headers as meta');
 
-test.todo('include slashes in name');
+test('include slashes in name', t => {
+	const fix = new Fixture();
+	fix.mockService('foo');
+
+	fix.post('*', "/foo/bar/bam/");
+
+	t.like(fix.service('foo').executed, {
+		name: 'bar/bam',
+	});
+});
 
 test('respond 404 if Service does not exist', t => {
 	const fix = new Fixture();
@@ -44,6 +54,35 @@ test('respond 404 if Service does not exist', t => {
 	});
 });
 
-test.todo('respond 400 if rejected');
+test('respond 400 if rejected', t => {
+	const fix = new Fixture();
+	fix.mockService('foo').executes(_ => {
+		throw new Rejection('NOPE', 'no way');
+	});
 
-test.todo('respond 500 if Exception is thrown');
+	fix.post('*', '/foo/bar');
+
+	t.like(fix.response, {
+		status: 400,
+		content: {
+			code: 'NOPE',
+			reason: 'no way'
+		}
+	});
+});
+
+test('respond 500 if Exception is thrown', t => {
+	const fix = new Fixture();
+	fix.mockService('foo').executes(_ => {
+		throw new Exception('sorry');
+	});
+
+	fix.post('*', '/foo/bar');
+
+	t.like(fix.response, {
+		status: 500,
+		content: {
+			message: 'sorry'
+		}
+	});
+});

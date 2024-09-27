@@ -9,18 +9,28 @@ export default class Fixture {
 	}
 
 	mockService(name) {
-		this.services.services[name] = new Service();
+		const service = new Service();
+		this.services.services[name] = service;
+		return service;
 	}
 
 	service(name) {
 		return this.services.services[name];
 	}
 
+	get(pattern, path) {
+		this.response = new Response();
+		this.app.get_handlers[pattern](
+			{path},
+			this.response
+		);
+	}
+
 	post(pattern, path, body=null) {
-		this.response = {};
-		this.app.handlers[pattern](
+		this.response = new Response();
+		this.app.post_handlers[pattern](
 			{path, body},
-			new Response(this)
+			this.response
 		);
 	}
 }
@@ -28,32 +38,53 @@ export default class Fixture {
 class App {
 	constructor(fixture) {
 		this.fix = fixture;
-		this.handlers = {};
+		this.get_handlers = {};
+		this.post_handlers = {};
+	}
+
+	get(pattern, handler) {
+		this.get_handlers[pattern] = handler;
 	}
 
 	post(pattern, handler) {
-		this.handlers[pattern] = handler;
+		this.post_handlers[pattern] = handler;
 	}
 }
 
 class Service {
+
+	answer(query) {
+		this.answered = query;
+		if (this.answerer) {
+			this.answerer(query);
+		}
+	}
+
 	execute(command) {
 		this.executed = command;
+		if (this.executer) {
+			this.executer(command);
+		}
+	}
+
+	answers(answerer) {
+		this.answerer = answerer;
+	}
+
+	executes(executer) {
+		this.executer = executer;
 	}
 }
 
 class Response {
-	constructor(fixture) {
-		this.fix = fixture;
-	}
 
 	status(status) {
-		this.fix.response.status = status;
+		this.status = status;
 		return this;
 	}
 
 	send(content) {
-		this.fix.response.content = content;
+		this.content = content;
 	}
 }
 
