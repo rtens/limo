@@ -13,7 +13,7 @@
 			(rename-buffer "limo test watch")))
 	(with-selected-window (get-buffer-window "limo test watch")
 		(setq window-size-fixed t)
-		(window-resize (selected-window) (- 30 (window-total-width)) t t))
+		(window-resize (selected-window) (- 20 (window-total-width)) t t))
 	(other-window 1))
 
 (global-set-key (kbd "C-x 9") 'my-limo-run-tests)
