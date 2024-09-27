@@ -12,11 +12,9 @@ test('use path as name', t => {
 		name: 'bar',
 		content: null
 	});
-	t.like(fix.response, {
-		status: 200,
-		content: 'OK'
-	});
 });
+
+test.todo('Respond with answer');
 
 test.todo('use quey parameters as content');
 

@@ -12,6 +12,14 @@ test('use path of POST as name', t => {
 		name: 'bar',
 		content: null
 	});
+});
+
+test('Respond with OK', t => {
+	const fix = new Fixture();
+	fix.mockService('foo');
+
+	fix.post('*', "/foo/bar/");
+
 	t.like(fix.response, {
 		status: 200,
 		content: 'OK'
