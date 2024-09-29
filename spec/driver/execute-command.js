@@ -38,7 +38,17 @@ test('use body as content', t => {
 	});
 });
 
-test.todo('use headers as meta');
+test('use headers as meta', t => {
+	const fix = new Fixture;
+	fix.mockService('foo');
+
+	fix.post('*', '/foo/bar', null, {aKey: 'a value'});
+
+	t.like(fix.service('foo').executed, {
+		name: 'bar',
+		meta: {aKey: 'a value'}
+	});
+});
 
 test('include slashes in name', t => {
 	const fix = new Fixture();

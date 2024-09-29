@@ -11,7 +11,7 @@ export default class Driver {
 		this._handleMessage(
 			request,
 			response,
-			() => null,
+			() => request.query,
 			(service, query) => {
 				const answer = service.answer(query);
 				response.status(200).send(answer);
@@ -49,7 +49,10 @@ export default class Driver {
 		const content = request.body;
 
 		const service = this.services.get(service_name);
-		const message = new Message(message_name, getContent());
+		const message = new Message(
+			message_name,
+			getContent(),
+			request.headers);
 
 		try {
 			handler(service, message);
@@ -70,8 +73,9 @@ export default class Driver {
 }
 
 class Message {
-	constructor(name, content=null) {
+	constructor(name, content=null, meta={}) {
 		this.name = name;
 		this.content = content;
+		this.meta = meta;
 	}
 }

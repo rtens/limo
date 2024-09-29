@@ -18,18 +18,18 @@ export default class Fixture {
 		return this.services.services[name];
 	}
 
-	get(pattern, path) {
+	get(pattern, path, query={}, headers={}) {
 		this.response = new Response();
 		this.app.get_handlers[pattern](
-			{path},
+			{path, query, headers},
 			this.response
 		);
 	}
 
-	post(pattern, path, body=null) {
+	post(pattern, path, body=null, headers={}) {
 		this.response = new Response();
 		this.app.post_handlers[pattern](
-			{path, body},
+			{path, body, headers},
 			this.response
 		);
 	}
@@ -56,8 +56,9 @@ class Service {
 	answer(query) {
 		this.answered = query;
 		if (this.answerer) {
-			this.answerer(query);
+			return this.answerer(query);
 		}
+		return null;
 	}
 
 	execute(command) {

@@ -51,7 +51,7 @@ Query: Message
 Event: Message
 
 Message
-- interaction: String
+- trace: String
 - name: String
 - meta: Map
 - content: Map
@@ -71,12 +71,12 @@ Provider
 - answer(service: String, Command): Any
 
 Rejection:
-- interaction: String
+- trace: String
 - code: Symbol
 - reason: String|Null
 
 Failure:
-- interaction: String
+- trace: String
 - message: String
 
 

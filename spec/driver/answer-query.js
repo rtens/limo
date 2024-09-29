@@ -9,16 +9,45 @@ test('use path as name', t => {
 	fix.get('*', "/foo/bar/");
 
 	t.like(fix.service('foo').answered, {
-		name: 'bar',
-		content: null
+		name: 'bar'
 	});
 });
 
-test.todo('Respond with answer');
+test('Respond with answer', t => {
+	const fix = new Fixture();
+	fix.mockService('foo').answers(_ => 'bam');
 
-test.todo('use quey parameters as content');
+	fix.get('*', "/foo/bar/");
 
-test.todo('use headers as meta');
+	t.like(fix.response, {
+		status: 200,
+		content: 'bam'
+	});
+});
+
+test('use quey parameters as content', t => {
+	const fix = new Fixture();
+	fix.mockService('foo');
+
+	fix.get('*', "/foo/bar/", {some: 'value'});
+
+	t.like(fix.service('foo').answered, {
+		name: 'bar',
+		content: {some: 'value'}
+	});
+});
+
+test('use headers as meta', t => {
+	const fix = new Fixture;
+	fix.mockService('foo');
+
+	fix.get('*', '/foo/bar', null, {aKey: 'a value'});
+
+	t.like(fix.service('foo').answered, {
+		name: 'bar',
+		meta: {aKey: 'a value'}
+	});
+});
 
 test('include slashes in name', t => {
 	const fix = new Fixture();
@@ -27,8 +56,7 @@ test('include slashes in name', t => {
 	fix.get('*', "/foo/bar/bam/");
 
 	t.like(fix.service('foo').answered, {
-		name: 'bar/bam',
-		content: null
+		name: 'bar/bam'
 	});
 });
 
