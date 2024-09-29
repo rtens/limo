@@ -4,8 +4,9 @@ export default class Fixture {
 	constructor() {
 		this.app = new App(this);
 		this.services = new ServiceContainer();
+		this.tracer = new Tracer();
 
-		new Driver(this.app, this.services);
+		new Driver(this.app, this.services, this.tracer);
 	}
 
 	mockService(name) {
@@ -32,6 +33,10 @@ export default class Fixture {
 			{path, body, headers},
 			this.response
 		);
+	}
+
+	nextTraces(...traces) {
+		this.tracer.traces = traces;
 	}
 }
 
@@ -100,5 +105,15 @@ class ServiceContainer {
 
 	get(name) {
 		return this.services[name];
+	}
+}
+
+class Tracer {
+	constructor() {
+		this.traces = [];
+	}
+
+	next() {
+		return this.traces.shift() || 'random';
 	}
 }

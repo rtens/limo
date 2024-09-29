@@ -1,8 +1,9 @@
 import Rejection from './rejection.js';
 
 export default class Driver {
-	constructor(app, services) {
+	constructor(app, services, tracer) {
 		this.services = services;
+		this.tracer = tracer;
 		app.get('*', this.onGet.bind(this));
 		app.post('*', this.onPost.bind(this));
 	}
@@ -50,6 +51,7 @@ export default class Driver {
 
 		const service = this.services.get(service_name);
 		const message = new Message(
+			this.tracer.next(),
 			message_name,
 			getContent(),
 			request.headers);
@@ -57,13 +59,17 @@ export default class Driver {
 		try {
 			handler(service, message);
 		} catch (r) {
+			const trace = message.trace + '_' + this.tracer.next();
+
 			if (r instanceof Rejection) {
 				response.status(400).send({
+					trace,
 					code: r.code,
 					reason: r.reason
 				});
 			} else {
 				response.status(500).send({
+					trace,
 					message: 'sorry'
 				});
 			}
@@ -73,7 +79,8 @@ export default class Driver {
 }
 
 class Message {
-	constructor(name, content=null, meta={}) {
+	constructor(trace, name, content=null, meta={}) {
+		this.trace = trace;
 		this.name = name;
 		this.content = content;
 		this.meta = meta;
